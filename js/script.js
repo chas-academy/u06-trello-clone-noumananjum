@@ -1,140 +1,141 @@
-const $dialog = $('#dialog');
-const $datepicker = $('#datepicker');
-const $colorpicker = $('#colorpicker');
-const $superBtn = $('#super-btn');
+const $dialog = $("#dialog");
+const $datepicker = $("#datepicker");
+const $colorpicker = $("#colorpicker");
+const $superBtn = $("#super-btn");
 
-$('.card-footer').hide();
+$(".card-footer").hide();
 
-$.widget('custom.superBtn', $.ui.button, {
+$.widget("custom.superBtn", $.ui.button, {
   _create: function () {
-    this.element.addClass('btn-sm btn-secondary');
+    this.element.addClass("btn-sm btn-secondary");
     return this._super();
   },
 });
 
 $(function () {
-  $('#todo-list-body, #doing-list-body, #done-list-body')
+  $("#todo-list-body, #doing-list-body, #done-list-body")
     .sortable({
-      connectWith: '.list-body',
-      cursor: 'grabbing',
+      connectWith: ".list-body",
+      cursor: "grabbing",
     })
     .disableSelection();
 
-  $('#tabs').tabs();
+  $("#tabs").tabs();
 
-  $('.btn').superBtn();
+  $(".btn").superBtn();
 
   $datepicker.datepicker({
     minDate: +1,
-    dateFormat: 'DD, d MM, yy',
+    dateFormat: "DD, d MM, yy",
     firstDay: 1,
-    showAnim: 'blind',
+    showAnim: "blind",
     autoSize: true,
   });
 
   $dialog.dialog({
     autoOpen: false,
     modal: true,
-    height: 'auto',
-    width: '30rem',
-    title: 'Edit todo',
+    height: "auto",
+    width: "30rem",
+    title: "Edit todo",
     show: {
-      effect: 'fade',
+      effect: "fade",
       duration: 400,
       size: 50,
     },
     hide: {
-      effect: 'fold',
+      effect: "fold",
       duration: 500,
       size: 50,
     },
     buttons: [
       {
-        text: 'Save',
-        class: 'btn btn-sm btn-secondary',
+        text: "Save",
+        class: "btn btn-sm btn-secondary",
         click: function () {
-          $(this).dialog('close');
+          $(this).dialog("close");
         },
       },
     ],
 
     create: function () {
-      $('.ui-dialog-titlebar-close').hide();
+      $(".ui-dialog-titlebar-close").hide();
     },
 
     open: function () {
-      const $thisCard = $($dialog.data('id'));
-      const $task = $thisCard.find('h3').text();
-      const $desc = $thisCard.data('desc');
-      const $deadlineObj = $thisCard.data('date');
-      const $cardBody = $thisCard.find('.todo-card-body');
-      const $cardColor = $cardBody.css('background-color');
+      const $thisCard = $($dialog.data("id"));
+      const $task = $thisCard.find("h3").text();
+      const $desc = $thisCard.data("desc");
+      const $deadlineObj = $thisCard.data("date");
+      const $cardBody = $thisCard.find(".todo-card-body");
+      const $cardColor = $cardBody.css("background-color");
 
       $colorpicker.val($cardColor);
-      $('#task-title').val($task);
-      $('#task-desc').val($desc);
+      $("#task-title").val($task);
+      $("#task-desc").val($desc);
 
       if (!$deadlineObj) {
-        $datepicker.datepicker('setDate', null);
+        $datepicker.datepicker("setDate", null);
       } else {
-        $datepicker.datepicker('setDate', $deadlineObj);
+        $datepicker.datepicker("setDate", $deadlineObj);
       }
 
-      $datepicker.on('change', function (event) {
-        let $thisCard = $($dialog.data('id'));
+      $datepicker.on("change", function (event) {
+        let $thisCard = $($dialog.data("id"));
         const $date = $(event.currentTarget).datepicker().val();
-        const $dateObj = $.datepicker.parseDate('DD, d MM, yy', $date);
-        $thisCard.data('date', $dateObj);
+        const $dateObj = $.datepicker.parseDate("DD, d MM, yy", $date);
+        $thisCard.data("date", $dateObj);
       });
 
-      $('#clear').on('click', function () {
-        $datepicker.datepicker('setDate', null);
-        $dialog.data('date', null);
-        $thisCard.find('.card-footer').hide();
+      $("#clear").on("click", function () {
+        $datepicker.datepicker("setDate", null);
+        $dialog.data("date", null);
+        $thisCard.data("date", null);
+        $thisCard.find(".card-footer").hide();
       });
 
       $colorpicker.spectrum({
-        type: 'component',
+        type: "component",
         showPaletteOnly: true,
         hideAfterPaletteSelect: true,
         showAlpha: false,
         showButtons: false,
         allowEmpty: false,
         palette: [
-          ['white', 'papayawhip', 'blanchedalmond', 'wheat', 'moccasin'],
-          ['linen', 'mistyrose', 'red', 'lavender', 'gainsboro'],
-          ['mintcream', 'azure', 'honeydew', 'lightgoldenrodyellow', 'lemonchiffon'],
+          ["white", "linen", "blanchedalmond", "wheat", "moccasin"],
+          ["mintcream", "azure", "honeydew", "lightgoldenrodyellow", "lemonchiffon"],
+          ["mistyrose", "lavender", "red", "gainsboro", "grey"],
         ],
 
         change: function (color) {
           const $colorhex = color.toHexString();
-          $cardBody.css('background-color', $colorhex);
+          $cardBody.css("background-color", $colorhex);
         },
       });
     },
 
     close: function () {
-      const $thisCard = $($dialog.data('id'));
-      const $dateObj = $thisCard.data('date');
+      const $thisCard = $($dialog.data("id"));
+      const $dateObj = $thisCard.data("date");
 
-      const $task = $('#task-title').val();
-      $thisCard.find('h3').text($task);
+      const $task = $("#task-title").val();
+      $thisCard.find("h3").text($task);
 
-      const $desc = $('#task-desc').val();
-      $thisCard.data('desc', $desc);
+      const $desc = $("#task-desc").val();
+      $thisCard.data("desc", $desc);
 
       if ($dateObj) {
-        $datepicker.datepicker('setDate', $dateObj);
-        $thisCard.find('.card-footer').show();
-        const $deadlineDate = $thisCard.find('.deadline-date');
+        $datepicker.datepicker("setDate", $dateObj);
+        $thisCard.find(".card-footer").show();
+        const $deadlineDate = $thisCard.find(".deadline-date");
         const $howLongToDeadline = $.format.prettyDate($dateObj);
         $deadlineDate.text($howLongToDeadline);
       }
     },
   });
 
-  $('.todo-card').on('click', function (event) {
-    $dialog.data('id', `#${event.currentTarget.id}`);
-    $dialog.dialog('open');
+  $(".todo-card").on("click", function (event) {
+    $dialog.data("id", `#${event.currentTarget.id}`);
+    $dialog.dialog("open");
   });
 });
