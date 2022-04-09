@@ -21,4 +21,4 @@ The finished solution must implement:
 
 ### Design
 
-This assignment was constructed with using Bootstrap, jQuery UI, Spectrum Colorpicker and custom CSS.
+This assignment was constructed using Bootstrap, jQuery UI, Spectrum Colorpicker and custom CSS.
